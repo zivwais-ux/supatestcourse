@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Airplane } from '@phosphor-icons/react'
-import { supabase } from '../lib/supabase'
+import { isDemo, supabase } from '../lib/supabase'
 import { Button, Field, Input } from '../components/ui'
 
 export function Login() {
@@ -40,7 +40,7 @@ export function Login() {
           <div className="text-center">
             <h1 className="text-lg font-semibold tracking-tight">Skyline CRM</h1>
             <p className="text-[13px]" style={{ color: 'var(--text-tertiary)' }}>
-              Staff access only
+              {isDemo ? 'Demo mode · any email and password will do' : 'Staff access only'}
             </p>
           </div>
         </div>
