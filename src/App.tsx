@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from './lib/auth'
 import { Layout } from './components/Layout'
 import { Login } from './pages/Login'
@@ -30,12 +30,16 @@ function AppShell() {
   )
 }
 
+// Static hosts without an SPA rewrite (e.g. a single-file bundle) opt into
+// hash routing at build time so deep links keep working.
+const Router = import.meta.env.VITE_HASH_ROUTER ? HashRouter : BrowserRouter
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProvider>
         <AppShell />
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   )
 }
