@@ -95,6 +95,12 @@ export function Login() {
         >
           {mode === 'sign_in' ? "No account yet? Create one" : 'Already have an account? Sign in'}
         </button>
+
+        {mode === 'sign_up' && (
+          <p className="mt-3 text-center text-[12px]" style={{ color: 'var(--text-tertiary)' }}>
+            Creating an account does not grant CRM access by itself. An admin must add your email to the staff list before you can view or edit records.
+          </p>
+        )}
       </div>
     </div>
   )

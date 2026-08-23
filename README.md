@@ -16,7 +16,13 @@ An airline CRM built on React, Vite, Tailwind, and Supabase. Manage flights, cus
 - **customers** — contact and travel document details
 - **orders** — links a customer to a flight with seat class, seat number, status, and price
 
-All three tables have row-level security enabled: only authenticated staff users can read or write. See `supabase/migrations/` for the full schema.
+All three tables have row-level security enabled and are gated by a `public.staff` allow-list keyed by email, not just by being logged in. Anyone can create an account (Supabase Auth), but a new account has zero access to CRM data until an admin adds its email:
+
+```sql
+insert into public.staff (email) values ('newstaff@example.com');
+```
+
+`zivwais@gmail.com` is pre-seeded as the first staff member. See `supabase/migrations/` for the full schema.
 
 ## Local development
 
