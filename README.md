@@ -47,7 +47,27 @@ npm run dev
 The same fixtures are available as SQL in `supabase/seed.sql`, which
 `supabase db reset` loads automatically.
 
-The app requires a Supabase project with the migration in `supabase/migrations/` applied:
+### Connected project
+
+A Supabase project is live and seeded with the fixtures above:
+
+| | |
+| --- | --- |
+| Project ref | `otlwrtwkcbcciirvefux` |
+| API URL | `https://otlwrtwkcbcciirvefux.supabase.co` |
+| Region | `eu-central-1` |
+
+`.env` is gitignored, so create it locally:
+
+```bash
+VITE_SUPABASE_URL=https://otlwrtwkcbcciirvefux.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_NfFlyPgrwKxE9pssgdJH4w_E0-IQ1Rb
+```
+
+The publishable key is safe to expose in a browser bundle — it carries no
+privileges of its own, and every table is gated by the RLS policies above.
+
+To point the app at a different project instead:
 
 ```bash
 supabase link --project-ref <your-project-ref>
