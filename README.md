@@ -1,32 +1,48 @@
-# React + TypeScript + Vite
+# Skyline CRM
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+An airline CRM built on React, Vite, Tailwind, and Supabase. Manage flights, customers, and orders behind a staff login.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Vite + React + TypeScript
+- Tailwind CSS v4
+- Supabase (Postgres, Auth, RLS)
+- React Router
+- Phosphor Icons
 
-## React Compiler
+## Data model
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **flights** — flight number, route, schedule, aircraft, status, price, seat inventory
+- **customers** — contact and travel document details
+- **orders** — links a customer to a flight with seat class, seat number, status, and price
 
-## Expanding the Oxlint configuration
+All three tables have row-level security enabled and are gated by a `public.staff` allow-list keyed by email, not just by being logged in. Anyone can create an account (Supabase Auth), but a new account has zero access to CRM data until an admin adds its email:
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sql
+insert into public.staff (email) values ('newstaff@example.com');
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+`zivwais@gmail.com` is pre-seeded as the first staff member. See `supabase/migrations/` for the full schema.
+
+## Local development
+
+```bash
+npm install
+cp .env.example .env   # fill in your Supabase project URL and publishable key
+npm run dev
+```
+
+The app requires a Supabase project with the migration in `supabase/migrations/` applied:
+
+```bash
+supabase link --project-ref <your-project-ref>
+supabase db push
+```
+
+Sign-up is open to any email (confirmation required) — the first account you create is your staff login.
+
+## Build
+
+```bash
+npm run build
+```
