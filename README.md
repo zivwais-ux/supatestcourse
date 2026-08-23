@@ -24,6 +24,18 @@ insert into public.staff (email) values ('newstaff@example.com');
 
 `zivwais@gmail.com` is pre-seeded as the first staff member. See `supabase/migrations/` for the full schema.
 
+## Demo mode
+
+With no Supabase credentials set, the app runs off seed data held in the
+browser — ten flights, ten customers and fourteen orders — so the whole UI can
+be explored without a backend. Login accepts any credentials, and edits persist
+to `localStorage` for that browser only.
+
+```bash
+npm install
+npm run dev            # no .env needed
+```
+
 ## Local development
 
 ```bash
@@ -31,6 +43,9 @@ npm install
 cp .env.example .env   # fill in your Supabase project URL and publishable key
 npm run dev
 ```
+
+The same fixtures are available as SQL in `supabase/seed.sql`, which
+`supabase db reset` loads automatically.
 
 The app requires a Supabase project with the migration in `supabase/migrations/` applied:
 
@@ -46,3 +61,7 @@ Sign-up is open to any email (confirmation required) — the first account you c
 ```bash
 npm run build
 ```
+
+Deep links need an SPA rewrite; `vercel.json` provides one for Vercel. For a
+static host that cannot rewrite, build with `VITE_HASH_ROUTER=1` to switch the
+router to hash URLs.
