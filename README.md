@@ -1,48 +1,32 @@
-# Skyline CRM
+# גולדשטיין נדל״ן — מערכת CRM
 
-An airline CRM built on React, Vite, Tailwind, and Supabase. Manage flights, customers, and orders behind a staff login.
+מערכת ניהול לקוחות ונכסים עבור [גולדשטיין נדל״ן](https://goldshtein.co.il) — תיווך, השקעות וייעוץ נדל״ן בזכרון יעקב והסביבה.
 
-## Stack
+הממשק כולו בעברית ובכיוון RTL.
 
-- Vite + React + TypeScript
-- Tailwind CSS v4
-- Supabase (Postgres, Auth, RLS)
-- React Router
-- Phosphor Icons
+## מסכים
 
-## Data model
+- **לוח בקרה** — מדדי מפתח, העיר המובילה בחודש האחרון, נכסים מובילים ולקוחות בשלב מתקדם
+- **נכסים** — תיק הנכסים עם חיפוש וסינון לפי סטטוס ועיר
+- **לקוחות** — טבלת לקוחות עם סוג, סטטוס, תקציב וסוכן מטפל
+- **מכירות לפי עיר** — העיר שמכרה הכי הרבה בתים בכל חודש
 
-- **flights** — flight number, route, schedule, aircraft, status, price, seat inventory
-- **customers** — contact and travel document details
-- **orders** — links a customer to a flight with seat class, seat number, status, and price
+## מודל הנתונים (Supabase)
 
-All three tables have row-level security enabled and are gated by a `public.staff` allow-list keyed by email, not just by being logged in. Anyone can create an account (Supabase Auth), but a new account has zero access to CRM data until an admin adds its email:
+- `clients` — לקוחות: סוג (קונה/מוכר/שוכר/משכיר/משקיע), סטטוס בצינור, תקציב, אזור מבוקש, סוכן ומקור הליד
+- `listings` — נכסים: עיר, שכונה, סוג נכס, חדרים, שטח, מחיר, סטטוס וסוכן
+- `city_monthly_sales` — מכירות חודשיות לפי עיר, כולל דגל `is_top_city` לעיר המובילה
 
-```sql
-insert into public.staff (email) values ('newstaff@example.com');
-```
+בכל הטבלאות מופעל RLS עם הרשאת קריאה בלבד — הנתונים הם נתוני הדגמה, ואין דרך לכתוב אליהם מהדפדפן.
 
-`zivwais@gmail.com` is pre-seeded as the first staff member. See `supabase/migrations/` for the full schema.
-
-## Local development
+## הרצה מקומית
 
 ```bash
 npm install
-cp .env.example .env   # fill in your Supabase project URL and publishable key
+cp .env.example .env   # למלא כתובת פרויקט ומפתח publishable
 npm run dev
 ```
 
-The app requires a Supabase project with the migration in `supabase/migrations/` applied:
+## סטאק
 
-```bash
-supabase link --project-ref <your-project-ref>
-supabase db push
-```
-
-Sign-up is open to any email (confirmation required) — the first account you create is your staff login.
-
-## Build
-
-```bash
-npm run build
-```
+Vite · React · TypeScript · Tailwind CSS v4 · Supabase · React Router · Phosphor Icons

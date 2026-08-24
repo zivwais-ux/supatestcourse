@@ -1,101 +1,98 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Airplane, ChartLineUp, SignOut, Ticket, Users, MoonStars, Sun } from '@phosphor-icons/react'
-import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { Buildings, ChartLineUp, House, Users } from '@phosphor-icons/react'
 
 const NAV = [
-  { to: '/', label: 'Dashboard', icon: ChartLineUp, end: true },
-  { to: '/flights', label: 'Flights', icon: Airplane, end: false },
-  { to: '/customers', label: 'Customers', icon: Users, end: false },
-  { to: '/orders', label: 'Orders', icon: Ticket, end: false },
+  { to: '/', label: 'לוח בקרה', icon: ChartLineUp, end: true },
+  { to: '/listings', label: 'נכסים', icon: House, end: false },
+  { to: '/clients', label: 'לקוחות', icon: Users, end: false },
+  { to: '/cities', label: 'מכירות לפי עיר', icon: Buildings, end: false },
 ]
 
-export function Layout({ email }: { email: string | undefined }) {
-  const [theme, setTheme] = useState<'light' | 'dark' | null>(() => {
-    try {
-      return (localStorage.getItem('theme') as 'light' | 'dark' | null) ?? null
-    } catch {
-      return null
-    }
-  })
-
-  useEffect(() => {
-    if (theme) {
-      document.documentElement.setAttribute('data-theme', theme)
-      try {
-        localStorage.setItem('theme', theme)
-      } catch {
-        /* ignore */
-      }
-    } else {
-      document.documentElement.removeAttribute('data-theme')
-    }
-  }, [theme])
-
+export function Layout() {
   return (
-    <div className="flex h-full min-h-[100dvh]">
+    <div className="flex min-h-[100dvh]" style={{ background: 'var(--surface)' }}>
       <aside
-        className="flex w-60 shrink-0 flex-col border-r px-3 py-4"
-        style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
+        className="sticky top-0 hidden h-[100dvh] w-[248px] shrink-0 flex-col border-l md:flex"
+        style={{ background: 'var(--surface-raised)', borderColor: 'var(--border)' }}
       >
-        <div className="flex items-center gap-2 px-2 pb-6 pt-1">
+        <div className="flex items-center gap-3 px-5 py-6">
           <div
-            className="flex h-8 w-8 items-center justify-center rounded-[8px]"
+            className="flex h-10 w-10 items-center justify-center rounded-[10px] text-[15px] font-bold text-white"
             style={{ background: 'var(--accent)' }}
           >
-            <Airplane size={18} weight="fill" color="white" />
+            ג״נ
           </div>
-          <span className="text-[15px] font-semibold tracking-tight">Skyline CRM</span>
+          <div className="leading-tight">
+            <div className="text-[15px] font-bold">גולדשטיין נדל״ן</div>
+            <div className="text-[12px]" style={{ color: 'var(--text-tertiary)' }}>
+              זכרון יעקב והסביבה
+            </div>
+          </div>
         </div>
 
-        <nav className="flex flex-1 flex-col gap-0.5">
-          {NAV.map((item) => (
+        <nav className="flex flex-col gap-1 px-3">
+          {NAV.map(({ to, label, icon: Icon, end }) => (
             <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) =>
-                `flex items-center gap-2.5 rounded-[8px] px-3 py-2 text-[13.5px] font-medium transition ${isActive ? '' : ''}`
-              }
+              key={to}
+              to={to}
+              end={end}
+              className="flex items-center gap-3 rounded-[9px] px-3 py-2.5 text-sm font-medium transition"
               style={({ isActive }) => ({
-                color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
                 background: isActive ? 'var(--accent-soft)' : 'transparent',
+                color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
               })}
             >
-              <item.icon size={17} />
-              {item.label}
+              <Icon size={19} weight="duotone" />
+              {label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="flex flex-col gap-2 border-t pt-3" style={{ borderColor: 'var(--border)' }}>
-          <div className="flex items-center justify-between px-1">
-            <span className="truncate text-[12px]" style={{ color: 'var(--text-tertiary)' }}>
-              {email}
-            </span>
-            <button
-              aria-label="Toggle theme"
-              onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-              className="rounded-[6px] p-1.5"
-              style={{ color: 'var(--text-secondary)' }}
-            >
-              {theme === 'dark' ? <Sun size={16} /> : <MoonStars size={16} />}
-            </button>
-          </div>
-          <button
-            onClick={() => supabase.auth.signOut()}
-            className="flex items-center gap-2 rounded-[8px] px-3 py-2 text-[13.5px] font-medium"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            <SignOut size={17} />
-            Sign out
-          </button>
+        <div className="mt-auto px-5 py-5 text-[11px] leading-relaxed" style={{ color: 'var(--text-tertiary)' }}>
+          מערכת ניהול לקוחות ונכסים
+          <br />
+          נתוני הדגמה
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto scrollbar-thin px-8 py-7">
-        <Outlet />
-      </main>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header
+          className="sticky top-0 z-10 flex items-center gap-3 border-b px-4 py-3 md:hidden"
+          style={{ background: 'var(--surface-raised)', borderColor: 'var(--border)' }}
+        >
+          <div
+            className="flex h-8 w-8 items-center justify-center rounded-[8px] text-[13px] font-bold text-white"
+            style={{ background: 'var(--accent)' }}
+          >
+            ג״נ
+          </div>
+          <span className="text-sm font-bold">גולדשטיין נדל״ן</span>
+        </header>
+
+        <nav
+          className="flex gap-1 overflow-x-auto border-b px-3 py-2 md:hidden"
+          style={{ background: 'var(--surface-raised)', borderColor: 'var(--border)' }}
+        >
+          {NAV.map(({ to, label, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              className="whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] font-medium"
+              style={({ isActive }) => ({
+                background: isActive ? 'var(--accent-soft)' : 'transparent',
+                color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+              })}
+            >
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <main className="mx-auto w-full max-w-[1180px] flex-1 px-4 py-6 md:px-8 md:py-9">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }

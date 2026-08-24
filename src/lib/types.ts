@@ -1,46 +1,53 @@
-export type FlightStatus = 'scheduled' | 'boarding' | 'departed' | 'landed' | 'delayed' | 'cancelled'
-export type SeatClass = 'economy' | 'premium_economy' | 'business' | 'first'
-export type OrderStatus = 'confirmed' | 'pending' | 'cancelled' | 'completed'
+export type ClientType = 'קונה' | 'מוכר' | 'שוכר' | 'משכיר' | 'משקיע'
+export type ClientStatus = 'ליד חדש' | 'בטיפול' | 'סיור מתוכנן' | 'במשא ומתן' | 'נסגר' | 'לא רלוונטי'
+export type ListingStatus = 'למכירה' | 'בבלעדיות' | 'להשכרה' | 'במשא ומתן' | 'נמכר' | 'הושכר'
 
-export interface Flight {
-  id: string
-  flight_number: string
-  origin: string
-  destination: string
-  departure_time: string
-  arrival_time: string
-  aircraft: string
-  status: FlightStatus
-  price: number
-  seats_available: number
-  created_at: string
-  updated_at: string
-}
-
-export interface Customer {
+export interface Client {
   id: string
   full_name: string
-  email: string
-  phone: string | null
-  passport_number: string | null
-  nationality: string | null
+  phone: string
+  email: string | null
+  client_type: ClientType
+  status: ClientStatus
+  budget_min: number | null
+  budget_max: number | null
+  preferred_city: string | null
+  preferred_rooms: number | null
+  agent: string
+  source: string | null
+  notes: string | null
   created_at: string
-  updated_at: string
 }
 
-export interface Order {
+export interface Listing {
   id: string
-  customer_id: string
-  flight_id: string
-  seat_class: SeatClass
-  seat_number: string | null
-  status: OrderStatus
-  total_price: number
+  title: string
+  city: string
+  neighborhood: string | null
+  street: string | null
+  property_type: string
+  rooms: number | null
+  size_sqm: number | null
+  lot_sqm: number | null
+  floor: number | null
+  price: number
+  status: ListingStatus
+  agent: string
+  has_parking: boolean
+  has_balcony: boolean
+  has_elevator: boolean
+  description: string | null
+  listed_at: string
   created_at: string
-  updated_at: string
 }
 
-export interface OrderWithRelations extends Order {
-  customer: Pick<Customer, 'id' | 'full_name' | 'email'> | null
-  flight: Pick<Flight, 'id' | 'flight_number' | 'origin' | 'destination' | 'departure_time'> | null
+export interface CityMonthlySale {
+  id: string
+  month: string
+  city: string
+  houses_sold: number
+  avg_price: number
+  total_volume: number
+  is_top_city: boolean
+  created_at: string
 }
